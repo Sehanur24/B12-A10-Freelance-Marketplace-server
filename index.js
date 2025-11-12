@@ -44,6 +44,17 @@ async function run() {
         });
 
 
+        //  Get all jobs
+        app.get("/jobs", async (req, res) => {
+            try {
+                const jobs = await jobCollection.find().sort({ postedAt: -1 }).toArray();
+                res.send(jobs);
+            } catch (err) {
+                res.status(500).send({ message: "Failed to fetch jobs" });
+            }
+        });
+
+
 
 
 

@@ -54,6 +54,19 @@ async function run() {
             }
         });
 
+        //  Get single job by ID
+        app.get("/jobs/:id", async (req, res) => {
+            try {
+                const id = req.params.id;
+                if (!ObjectId.isValid(id))
+                    return res.status(400).send({ message: "Invalid Job ID" });
+                const job = await jobCollection.findOne({ _id: new ObjectId(id) });
+                res.send(job);
+            } catch (err) {
+                res.status(500).send({ message: "Error fetching job details" });
+            }
+        });
+
 
 
 

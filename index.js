@@ -157,7 +157,33 @@ async function run() {
             }
         });
 
+        //  Get My Accepted Tasks
+        app.get("/my-accepted-tasks", async (req, res) => {
+            try {
+                const email = req.query.email;
+                if (!email)
+                    return res.status(400).send({ message: "Missing email query parameter" });
 
+                const tasks = await acceptedCollection.find({ acceptedBy: email }).toArray();
+                res.send(tasks);
+            } catch (err) {
+                res.status(500).send({ message: "Failed to fetch accepted tasks" });
+            }
+        });
+
+        //  Delete Accepted Task (Done / Cancel)
+        app.delete("/my-accepted-tasks/:id", async (req, res) => {
+            try {
+                const id = req.params.id;
+                if (!ObjectId.isValid(id))
+                    return res.status(400).send({ message: "Invalid Task ID" });
+
+                await acceptedCollection.deleteOne({ _id: new ObjectId(id) });
+                res.send({ message: "Task removed successfully" });
+            } catch (err) {
+                res.status(500).send({ message: "Failed to remove task" });
+            }
+        });
 
 
 

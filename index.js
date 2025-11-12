@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 // Middleware setup
 app.use(
     cors({
-        origin: process.env.CLIENT_ORIGIN || "*", 
+        origin: process.env.CLIENT_ORIGIN || "*",
         credentials: true,
     })
 );
@@ -38,7 +38,7 @@ async function run() {
         console.log(" MongoDB connected successfully");
 
 
-         //  Home route
+        //  Home route
         app.get("/", (req, res) => {
             res.send(" Freelance Marketplace Server is Running Smoothly!");
         });
@@ -184,9 +184,6 @@ async function run() {
                 res.status(500).send({ message: "Failed to remove task" });
             }
         });
-
-
-
 
 
         //  Test MongoDB connection

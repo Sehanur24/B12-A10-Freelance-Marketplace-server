@@ -38,6 +38,13 @@ async function run() {
         console.log(" MongoDB connected successfully");
 
 
+         //  Home route
+        app.get("/", (req, res) => {
+            res.send(" Freelance Marketplace Server is Running Smoothly!");
+        });
+
+
+
 
 
 

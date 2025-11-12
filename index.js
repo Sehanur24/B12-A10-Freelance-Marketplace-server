@@ -29,7 +29,7 @@ const client = new MongoClient(uri, {
 //  Main Server Logic
 async function run() {
     try {
-        await client.connect();
+        // await client.connect();
 
         const db = client.db(process.env.DB_NAME || "siam-db");
         const jobCollection = db.collection("jobs");
@@ -187,7 +187,7 @@ async function run() {
 
 
         //  Test MongoDB connection
-        await client.db("admin").command({ ping: 1 });
+        // await client.db("admin").command({ ping: 1 });
         console.log(" Server connected and running smoothly!");
     } catch (err) {
         console.error(" Server failed to start:", err);

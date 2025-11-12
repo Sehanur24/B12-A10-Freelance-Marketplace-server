@@ -67,6 +67,21 @@ async function run() {
             }
         });
 
+        //  Add new job
+        app.post("/jobs", async (req, res) => {
+            try {
+                const newJob = req.body;
+                if (!newJob.title || !newJob.userEmail)
+                    return res.status(400).send({ message: "Missing required fields" });
+
+                newJob.postedAt = new Date();
+                const result = await jobCollection.insertOne(newJob);
+                res.send({ acknowledged: true, insertedId: result.insertedId });
+            } catch (err) {
+                res.status(500).send({ message: "Failed to add job" });
+            }
+        });
+
 
 
 

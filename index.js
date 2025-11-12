@@ -114,6 +114,49 @@ async function run() {
             }
         });
 
+        //  My Added Jobs
+        app.get("/myAddedJobs", async (req, res) => {
+            try {
+                const email = req.query.email;
+                if (!email)
+                    return res.status(400).send({ message: "Missing email query parameter" });
+
+                const myJobs = await jobCollection.find({ userEmail: email }).toArray();
+                res.send(myJobs);
+            } catch (err) {
+                res.status(500).send({ message: "Failed to fetch user jobs" });
+            }
+        });
+
+        //  Accept a Job
+        app.post("/accept-task", async (req, res) => {
+            try {
+                const { jobId, title, acceptedBy } = req.body;
+                if (!ObjectId.isValid(jobId))
+                    return res.status(400).send({ message: "Invalid jobId" });
+
+                const job = await jobCollection.findOne({ _id: new ObjectId(jobId) });
+                if (!job) return res.status(404).send({ message: "Job not found" });
+                if (job.userEmail === acceptedBy)
+                    return res
+                        .status(403)
+                        .send({ message: "You cannot accept your own job" });
+
+                const acceptedJob = {
+                    jobId: new ObjectId(jobId),
+                    title,
+                    acceptedBy,
+                    acceptedAt: new Date(),
+                    status: "pending",
+                };
+
+                const result = await acceptedCollection.insertOne(acceptedJob);
+                res.send({ acknowledged: true, insertedId: result.insertedId });
+            } catch (err) {
+                res.status(500).send({ message: "Failed to accept task" });
+            }
+        });
+
 
 
 

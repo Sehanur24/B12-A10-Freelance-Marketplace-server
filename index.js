@@ -82,6 +82,38 @@ async function run() {
             }
         });
 
+        //  Update a job
+        app.put("/jobs/:id", async (req, res) => {
+            try {
+                const id = req.params.id;
+                if (!ObjectId.isValid(id))
+                    return res.status(400).send({ message: "Invalid Job ID" });
+
+                const updatedData = req.body;
+                await jobCollection.updateOne(
+                    { _id: new ObjectId(id) },
+                    { $set: updatedData }
+                );
+                res.send({ message: "Job updated successfully" });
+            } catch (err) {
+                res.status(500).send({ message: "Failed to update job" });
+            }
+        });
+
+        //  Delete a job
+        app.delete("/jobs/:id", async (req, res) => {
+            try {
+                const id = req.params.id;
+                if (!ObjectId.isValid(id))
+                    return res.status(400).send({ message: "Invalid Job ID" });
+
+                await jobCollection.deleteOne({ _id: new ObjectId(id) });
+                res.send({ message: "Job deleted successfully" });
+            } catch (err) {
+                res.status(500).send({ message: "Failed to delete job" });
+            }
+        });
+
 
 
 
